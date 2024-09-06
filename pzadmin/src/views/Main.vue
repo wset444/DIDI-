@@ -1,12 +1,14 @@
 <template>
     <div class="common-layout">
         <el-container>
-            <el-aside width="200px">
+            <el-aside width="auto">
                 <Aside />
             </el-aside>
-            <el-container>
-                <el-header>Header</el-header>
-                <el-main>Main</el-main>
+            <el-container style="background-color: #f2f6f8;">
+                <el-header>
+                    <navHead />
+                </el-header>
+                <el-main> <router-view></router-view></el-main>
             </el-container>
         </el-container>
     </div>
@@ -15,12 +17,5 @@
 
 <script setup>
 import Aside from '../components/aside.vue';
-
+import navHead from '../components/navHead.vue';
 </script>
-
-<style lang="less" scoped>
-.common-layout {
-    height: 100vh;
-    width: 100vw;
-}
-</style>

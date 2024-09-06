@@ -4,6 +4,9 @@ import App from "./App.vue";
 import router from "./router/index";
 import ElementPlus from "element-plus";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import "./assets/style.css";
+
+import store from "./store/index";
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -11,5 +14,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.use(router);
+app.use(store);
 app.use(ElementPlus);
 app.mount("#app");
