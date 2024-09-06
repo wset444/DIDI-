@@ -8,4 +8,8 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.container {
+  height: 100vh;
+}
+</style>
