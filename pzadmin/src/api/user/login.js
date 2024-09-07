@@ -1,24 +1,28 @@
 import instance from "../index";
-export const getInforDetail = (params) => {
+
+//登录
+export const getInforDetail = (data) => {
   return instance({
     method: "post",
-    url: "/v3pz/login",
-    data: params,
+    url: "/login",
+    data,
   });
 };
 
-export const getInfo = (params) => {
+//发送验证码
+export const getInfo = (data) => {
   return instance({
     method: "post",
-    url: "/v3pz/get/code",
-    data: params,
+    url: "/get/code",
+    data: data,
   });
 };
 
-export const registered = (params) => {
+//注册
+export const registered = (data) => {
   return instance({
     method: "post",
-    url: "/v3pz/user/authentication",
-    data: params,
+    url: "/user/authentication",
+    data,
   });
 };

@@ -1,9 +1,10 @@
 //http.js
 import axios from "axios";
+import { ElMessage } from "element-plus";
 
 // 1. 创建axios实例
 const instance = axios.create({
-  baseURL: "https:/v3pz.itndedu.com", //请求的域名  url = baseURL + requestUrl
+  baseURL: "https:/v3pz.itndedu.com/v3pz", //请求的域名  url = baseURL + requestUrl
   timeout: 5000, // 请求超时时间
   // headers: { //设置请求头
   //   "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -22,10 +23,11 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
-
     const token = localStorage.getItem("pz_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    //不需要添加token的api
+    const whiteUrl = ["/get/code", "/user/authentication", "/login"];
+    if (token && !whiteUrl.includes(config.url)) {
+      config.headers["x-token"] = token;
     }
 
     return config; //拦截器里一定要记得将拦截的结果处理后返回，否则无法进行数据获取
@@ -43,10 +45,17 @@ instance.interceptors.response.use(
   (res) => {
     // 在请求成功后对响应数据做处理
     // console.log(res.data);
-    // if (res.status === 200) {
-    //   return res.data;
-    // }
-    return res.data;
+    if (res.data.code === -1) {
+      ElMessage.error(res.data.message);
+    }
+    if (res.data.code === -2) {
+      localStorage.removeItem("pz_token");
+      localStorage.removeItem("pz_userInfo");
+      window.location.href = window.location.origin;
+      ElMessage.error("用户信息已失效！");
+    }
+
+    return res;
   },
   (err) => {
     // 对响应错误做些什么
