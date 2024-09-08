@@ -4,8 +4,8 @@ import login from "../views/login/index.vue";
 import Dashboard from "../views/dashboard/index.vue";
 import Admin from "../views/auth/admin/index.vue";
 import Group from "../views/auth/group/index.vue";
-import Staff from "../views/auth/group/index.vue";
-import Order from "../views/auth/group/index.vue";
+import Staff from "../views/vppz/staff/index.vue";
+import Order from "../views/vppz/order/index.vue";
 const routes = [
   {
     path: "/",

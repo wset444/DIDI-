@@ -23,13 +23,13 @@
         <div class="header-right">
             <el-dropdown>
                 <div class="el-dropdown-link flex-box">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                    <p class="user-name">west444</p>
+                    <el-avatar :src="userInfo.avatar" />
+                    <p class="user-name">{{ userInfo.name }}</p>
 
                 </div>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item>退出</el-dropdown-item>
+                        <el-dropdown-item @click="rmove()">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -40,17 +40,27 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 const store = useStore()
 const clickButton = () => {
     store.commit('collapseMenu')
 
 }
 
+
 const router = useRouter()
 const route = useRoute()
+
+const rmove = () => {
+    localStorage.removeItem("pz_token");
+    localStorage.removeItem("pz_userInfo");
+    ElMessage.success('退出成功！！')
+    router.push('/login')
+
+}
 const selectMenu = ref([])
 selectMenu.value = store.state.menu.selectMenu
 const delItem = (item, index) => {
@@ -78,6 +88,11 @@ const delItem = (item, index) => {
     }
 
 }
+const userInfo = ref({})
+onMounted(() => {
+    userInfo.value = JSON.parse(localStorage.getItem('pz_userInfo'))
+    console.log(userInfo.value.name);
+})
 
 </script>
 

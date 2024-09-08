@@ -8,3 +8,11 @@ export const authAdmin = (params) => {
     params,
   });
 };
+
+export const UserInfo = (data) => {
+  return instance({
+    method: "post",
+    url: "/update/user",
+    data,
+  });
+};

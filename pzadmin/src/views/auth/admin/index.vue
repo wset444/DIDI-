@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { authAdmin } from '../../../api/user/user'
+import { authAdmin, UserInfo } from '../../../api/user/user'
 import { onMounted, ref } from 'vue'
 const tableData = ref([])
 const paging = ref({
@@ -23,6 +23,9 @@ onMounted(() => {
         console.log(res.data.data.list);
         tableData.value = res.data.data.list
 
+    })
+    UserInfo({
+        name: 'west444'
     })
 })
 </script>
