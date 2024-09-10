@@ -7,6 +7,7 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import "./assets/style.css";
 import "element-plus/dist/index.css";
 import store from "./store/index";
+import paneHead from "./components/paneHead.vue";
 
 //全局路由守卫
 router.beforeEach((to, from) => {
@@ -25,7 +26,7 @@ const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
-
+app.component("paneHead", paneHead);
 app.use(router);
 app.use(store);
 app.use(ElementPlus);

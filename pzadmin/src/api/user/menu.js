@@ -26,3 +26,13 @@ export const setMenu = (data) => {
     data,
   });
 };
+
+//菜单权限下拉
+
+export const selectList = (params) => {
+  return instance({
+    method: "get",
+    url: "/menu/selectlist",
+    params,
+  });
+};

@@ -1,6 +1,9 @@
 <template>
     <div>
-        <el-button @click="handleClick(1)" style="margin-bottom: 20px;">新增</el-button>
+        <paneHead :title="titles" :description="description" />
+        <div class="btns">
+            <el-button :icon="Plus" type="primary" @click="handleClick(1)" style="margin-bottom: 20px;">新增</el-button>
+        </div>
         <el-dialog v-model="dialogTableVisible" :before-close="closeDialog" :close="close" :title="title" width="500">
             <el-form :rules="rules" ref="formRef" :model="form" label-width="100px" label-position="left">
                 <el-form-item label="ID" prop="id" v-show="isShow">
@@ -31,12 +34,22 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="pagination-info">
+            <el-pagination v-model:current-page="pagination.pageNum" :page-size="pagination.pageSize" :size="size"
+                :disabled="disabled" :background="background" layout="total, prev, pager, next"
+                :total="pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        </div>
     </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { getMenu, getMenuList, setMenu } from '../../../api/user/menu'
+import { Plus } from "@element-plus/icons-vue";
+//菜单标题
+const titles = '菜单管理'
+const description = '菜单规则通常对应一个控制器的方法,同时菜单栏数据也从规则中获取'
+
 const form = ref({
     name: '',
     permissions: "",
@@ -59,23 +72,53 @@ const datas = ref([
 
 const tableData = ref([])
 
+
+//分页器事件
+const pagination = ref({
+    pageNum: 1,
+    pageSize: 10,
+    total: 0
+})
+const handleSizeChange = (val) => { console.log(val); }
+const handleCurrentChange = (val) => {
+    pagination.value.pageNum = val
+    getMenuList(
+        {
+            pageNum: pagination.value.pageNum,
+            pageSize: pagination.value.pageSize,
+        }
+    ).then(({ data }) => {
+        console.log(data.data.total);
+        pagination.value.total = data.data.total
+        tableData.value = data.data.list
+
+    })
+}
+
 onMounted(() => {
     getMenu().then(res => {
         datas.value = res.data.data
     })
     getMenuList(
         {
-            pageNum: "1",
-            pageSize: 20
+            pageNum: pagination.value.pageNum,
+            pageSize: pagination.value.pageSize,
         }
     ).then(({ data }) => {
-        console.log(data);
+        console.log(data.data.total);
+        pagination.value.total = data.data.total
         tableData.value = data.data.list
+
     })
 })
+
+
+
+
 //选中默认权限
 const defKeys = [4, 5]
 const treeRef = ref()
+
 
 
 //弹窗关闭回调
@@ -147,3 +190,13 @@ const handleClick = (isShowId, dataes) => {
 
 }
 </script>
+<style>
+.pagination-info {
+    background: #fff;
+}
+
+.btns {
+    background: #fff;
+    padding: 10px 0px 10px 10px;
+}
+</style>
