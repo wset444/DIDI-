@@ -1,6 +1,6 @@
 <template>
     <div>
-        <paneHead :title="titles" :description="description" />
+        <paneHead :title="route.meta.name" :description="route.meta.describe" />
         <div class="btns">
             <el-button :icon="Plus" type="primary" @click="handleClick(1)" style="margin-bottom: 20px;">新增</el-button>
         </div>
@@ -23,7 +23,7 @@
         </el-dialog>
         <el-table :data="tableData" stripe style="width: 100%">
             <el-table-column prop="id" label="id" />
-            <el-table-column prop="name" label="用户名" />
+            <el-table-column prop="name" label="昵称" />
             <el-table-column prop="permissionName" label="权限" />
             <el-table-column prop="create_time" label="编辑">
                 <template #default="scope">
@@ -46,6 +46,11 @@
 import { ref, reactive, onMounted } from 'vue'
 import { getMenu, getMenuList, setMenu } from '../../../api/user/menu'
 import { Plus } from "@element-plus/icons-vue";
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+
 //菜单标题
 const titles = '菜单管理'
 const description = '菜单规则通常对应一个控制器的方法,同时菜单栏数据也从规则中获取'
@@ -88,7 +93,7 @@ const handleCurrentChange = (val) => {
             pageSize: pagination.value.pageSize,
         }
     ).then(({ data }) => {
-        console.log(data.data.total);
+
         pagination.value.total = data.data.total
         tableData.value = data.data.list
 
@@ -105,7 +110,7 @@ onMounted(() => {
             pageSize: pagination.value.pageSize,
         }
     ).then(({ data }) => {
-        console.log(data.data.total);
+
         pagination.value.total = data.data.total
         tableData.value = data.data.list
 

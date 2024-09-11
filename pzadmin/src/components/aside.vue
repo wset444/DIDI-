@@ -13,13 +13,12 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import treenMenu from './treenMenu.vue'
 
-import { useRouter } from 'vue-router'
-
 const store = useStore()
-const res = computed(() => store.state.menu.isCollapse)
-const router = useRouter()
-const routerListData: any = ref([])
-routerListData.value = router.options.routes[0].children
+
+const routerListData = computed(() => { return store.state.menu.menuList }
+)
+const res = computed(() => { return store.state.menu.isCollapse })
+
 
 
 const isCollapse = ref(true)

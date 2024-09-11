@@ -1,7 +1,12 @@
-const state = {
-  isCollapse: false,
-  selectMenu: [],
-};
+const locData = localStorage.getItem("pz_v3pz");
+
+const state = locData
+  ? locData.menu
+  : {
+      isCollapse: false,
+      selectMenu: [],
+      menuList: [],
+    };
 
 const mutations = {
   collapseMenu(state) {
@@ -12,7 +17,6 @@ const mutations = {
       state.selectMenu.findIndex((item) => item.path === payload.path) === -1
     ) {
       state.selectMenu.push(payload);
-      console.log(state.selectMenu);
     }
   },
   delMenu(state, index) {
@@ -22,8 +26,27 @@ const mutations = {
     const index = state.selectMenu.findIndex(
       (val) => val.name === payload.name
     );
-    console.log(index);
+
     state.selectMenu.splice(index, 1);
+  },
+  dynamicMenu(state, payload) {
+    const modules = import.meta.glob("../../views/**/**/*.vue");
+
+    function routerSet(router) {
+      //判断有没有子菜单,拼接路由数据
+      router.forEach((route) => {
+        if (!route.children) {
+          const url = `../../views${route.meta.path}/index.vue`;
+
+          route.component = modules[url];
+        } else {
+          routerSet(route.children);
+        }
+      });
+    }
+    routerSet(payload);
+    state.menuList = payload;
+    // console.log(state.menuList);
   },
 };
 

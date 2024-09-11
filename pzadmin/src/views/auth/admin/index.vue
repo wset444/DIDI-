@@ -1,6 +1,6 @@
 <template>
     <div>
-        <paneHead :title="titles" :description="description" />
+        <paneHead :title="route.meta.name" :description="route.meta.describe" />
         <el-table :data="tableData" stripe style="width: 100%">
             <el-table-column prop="id" label="id" />
             <el-table-column prop="name" label="昵称" />
@@ -65,8 +65,9 @@
 import { authAdmin, UserInfo } from '../../../api/user/user'
 import { selectList } from '../../../api/user/menu'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-
+const route = useRoute()
 
 
 //编辑

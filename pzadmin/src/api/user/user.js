@@ -9,10 +9,19 @@ export const authAdmin = (params) => {
   });
 };
 
+//用户信息
 export const UserInfo = (data) => {
   return instance({
     method: "post",
     url: "/update/user",
     data,
+  });
+};
+
+//用户菜单权限
+export const UserPermissions = () => {
+  return instance({
+    method: "get",
+    url: "/menu/permissions",
   });
 };

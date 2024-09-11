@@ -57,9 +57,10 @@ const route = useRoute()
 const rmove = () => {
     localStorage.removeItem("pz_token");
     localStorage.removeItem("pz_userInfo");
+    localStorage.removeItem('pz_v3pz')
     ElMessage.success('退出成功！！')
-    router.push('/login')
-
+    // router.push('/login')
+    window.location.href = window.location.origin
 }
 const selectMenu = ref([])
 selectMenu.value = store.state.menu.selectMenu
@@ -91,7 +92,7 @@ const delItem = (item, index) => {
 const userInfo = ref({})
 onMounted(() => {
     userInfo.value = JSON.parse(localStorage.getItem('pz_userInfo'))
-    console.log(userInfo.value.name);
+
 })
 
 </script>

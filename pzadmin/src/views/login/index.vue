@@ -37,10 +37,15 @@
 <script setup>
 import { UserFilled, Lock, Iphone } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { ref, reactive } from "vue"
+import { ref, reactive, computed, toRaw } from "vue"
 import { getInforDetail, getInfo, registered } from '../../api/user/login'
+import { UserPermissions } from '../../api/user/user'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 const imgUrl = new URL('../../../public/login-head.png', import.meta.url).href
+
+
+
 
 
 //切换表单 (0登录 1注册)
@@ -104,7 +109,6 @@ const getInfos = () => {
 
 const validatorUser = (rules, value, callback) => {
     //不能为空
-
     if (value === '') {
         callback(new Error('请输入账号'))
     } else {
@@ -130,6 +134,11 @@ const rules = ref({
 
 
 const router = useRouter()
+const store = useStore()
+
+const menuLists = computed(() => {
+    return store.state.menu.menuList
+})
 const loginFromRef = ref()
 const onSubmit = async (loginFromEl) => {
     if (!loginFromEl) return
@@ -141,11 +150,21 @@ const onSubmit = async (loginFromEl) => {
                     passWord: loginForm.value.passWord,
                 }).then(({ data }) => {
                     if (data.code === 10000) {
-                        console.log(data.data.token);
-                        ElMessage.success('登录成功！')
 
+                        ElMessage.success('登录成功！')
                         localStorage.setItem('pz_token', data.data.token)
                         localStorage.setItem('pz_userInfo', JSON.stringify(data.data.userInfo))
+                        router.push('/')
+                        UserPermissions().then(({ data }) => {
+                            store.commit('dynamicMenu', data.data)
+                            toRaw(menuLists.value).forEach(item => {
+                                router.addRoute('main', item)
+
+                            })
+
+                        })
+
+
                         router.push('/')
                     }
 

@@ -9,6 +9,15 @@ import "element-plus/dist/index.css";
 import store from "./store/index";
 import paneHead from "./components/paneHead.vue";
 
+//刷新后动态路由添加
+const localData = JSON.parse(localStorage.getItem("pz_v3pz"));
+if (localData) {
+  store.commit("dynamicMenu", localData.menu.menuList);
+  localData.menu.menuList.forEach((item) => {
+    router.addRoute("main", item);
+  });
+}
+
 //全局路由守卫
 router.beforeEach((to, from) => {
   const token = localStorage.getItem("pz_token");
