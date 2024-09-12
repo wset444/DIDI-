@@ -1,7 +1,7 @@
 <template>
     <el-menu :style="{ width: !res ? '230px' : '64px', height: '100vh' }" active-text-color="#ffd04b"
-        background-color="#545c64" class="el-menu-vertical-demo" default-active="2" :collapse="res" text-color="#fff"
-        @open="handleOpen" @close="handleClose">
+        background-color="#545c64" class="el-menu-vertical-demo" :default-active="active" :collapse="res"
+        text-color="#fff" @open="handleOpen" @close="handleClose">
         <p class="logo-title">{{ res ? 'DD' : '医疗系统' }}</p>
         <treenMenu :index="'1'" :data="routerListData" />
     </el-menu>
@@ -18,6 +18,8 @@ const store = useStore()
 const routerListData = computed(() => { return store.state.menu.menuList }
 )
 const res = computed(() => { return store.state.menu.isCollapse })
+
+const active = computed(() => { return store.state.menu.menuActive })
 
 
 

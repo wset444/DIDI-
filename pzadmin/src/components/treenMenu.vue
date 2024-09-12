@@ -1,6 +1,5 @@
 <template>
     <template v-for=" item in  routerList ">
-
         <el-menu-item @click="toRouter(item, `${props.index}-${item.meta.id}`)"
             v-if="!item.children || item.children.length == 0" :index="`${props.index}-${item.meta.id}`"
             :key="`${props.index} -${item.meta.id}`">
@@ -44,5 +43,6 @@ const toRouter = (e, a) => {
     // console.log(e.meta);
     router.push(e.meta.path)
     store.commit('addMenu', e.meta)
+    store.commit('updateMenuActive', a)
 }
 </script>

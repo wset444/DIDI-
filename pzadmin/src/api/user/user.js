@@ -25,3 +25,49 @@ export const UserPermissions = () => {
     url: "/menu/permissions",
   });
 };
+
+//陪护师列表
+export const companion = (params) => {
+  return instance({
+    method: "get",
+    url: "/companion/list",
+    params,
+  });
+};
+
+//陪护师编辑or添加
+export const addCompanions = (data) => {
+  return instance({
+    method: "post",
+    url: "/companion",
+    data,
+  });
+};
+
+//陪护师编辑or添加
+export const photoList = (params) => {
+  return instance({
+    method: "get",
+    url: "/photo/list",
+    params,
+  });
+};
+
+//删除
+
+export const rmoveist = (data) => {
+  return instance({
+    method: "post",
+    url: "/delete/companion",
+    data,
+  });
+};
+
+//订单列表
+export const order = (params) => {
+  return instance({
+    method: "get",
+    url: "/admin/order",
+    params,
+  });
+};

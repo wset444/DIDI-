@@ -6,6 +6,7 @@ const state = locData
       isCollapse: false,
       selectMenu: [],
       menuList: [],
+      menuActive: "1-1",
     };
 
 const mutations = {
@@ -47,6 +48,9 @@ const mutations = {
     routerSet(payload);
     state.menuList = payload;
     // console.log(state.menuList);
+  },
+  updateMenuActive(state, payload) {
+    state.menuActive = payload;
   },
 };
 

@@ -66,6 +66,7 @@ import { authAdmin, UserInfo } from '../../../api/user/user'
 import { selectList } from '../../../api/user/menu'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import formatTimestamp from '../../../hooks/useTime/index'
 
 const route = useRoute()
 
@@ -115,40 +116,8 @@ const handleCurrentChange = (val) => {
 
 }
 
-//解析时间戳
-const formatTimestamp = (ts) => {
-    // 创建一个新的Date对象  
-    const date = new Date(ts);
-
-    // 格式化日期时间字符串  
-    // 注意：这里的格式化方式可以根据你的需求进行调整  
-    return date.toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false, // 使用24小时制  
-    });
-};
-
-
-const titles = '账号管理'
-const description = '账号通常对应一个控制器的方法,同时菜单栏数据也从规则中获取'
 const tableData = ref([])
-
-
-
 //状态字典
-
-const stateInfo = ref({
-    1: '正常'
-})
-const findState = (state) => {
-    return stateInfo.value[state]
-}
-
 
 onMounted(() => {
     authAdmin(pagination.value).then((res) => {
