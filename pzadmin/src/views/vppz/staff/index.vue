@@ -3,11 +3,12 @@
         <paneHead :title="route.meta.name" :description="route.meta.describe" />
         <div class="btns"><el-button :icon="Plus" type="primary" @click="add">创建</el-button>
 
-            <el-popconfirm @confirm="confirms" width="220" :icon="InfoFilled" icon-color="#626AEF" title="是否确认删除" @cancel="onCancel">
+            <el-popconfirm @confirm="confirms" width="220" :icon="InfoFilled" icon-color="#626AEF" title="是否确认删除"
+                @cancel="onCancel">
                 <template #reference>
                     <el-button :icon="Delete" type="danger" @click="rmover">删除</el-button>
                 </template>
-             
+
             </el-popconfirm>
 
 
@@ -116,22 +117,22 @@ import { ElMessage } from 'element-plus'
 import { Plus, Delete } from '@element-plus/icons-vue'
 import formatTimestamp from '../../../hooks/useTime/index'
 
-const newsList=ref([])
+const newsList = ref([])
 const handleSelectionChange = (val) => {
     const List = val
-    const newList = List.map(item => ({ id:item.id})
+    const newList = List.map(item => ({ id: item.id })
     )
 
-    newsList.value=newList
-    
+    newsList.value = newList
+
 
 }
-const confirms =()=>{
-rmoveist({
+const confirms = () => {
+    rmoveist({
         id: newsList.value
-    }).then(res=>{
-        if(res.code===10000)
-        ElMessage.success('删除成功')
+    }).then(res => {
+        if (res.code === 10000)
+            ElMessage.success('删除成功')
         companion(pagination.value).then((res) => {
             tableData.value = res.data.data.list
             pagination.value.total = res.data.data.total
@@ -155,7 +156,15 @@ const nub = {
 //创建陪护师傅
 const add = () => {
     dialogTableVisible.value = true
-    permissions.value.avatar = ''
+    permissions.value = {
+        id: "",
+        mobile: "",
+        active: 1,
+        age: 0,
+        avatar: "",
+        name: "",
+        sex: ""
+    }
     imageUrl.value = ''
 }
 
@@ -193,7 +202,7 @@ const edites = () => {
         name: permissions.value.name,
         sex: permissions.value.sex,
     }).then(res => {
-        if(res.code=10000){
+        if (res.code = 10000) {
             ElMessage.success('提交成功！')
         }
 
