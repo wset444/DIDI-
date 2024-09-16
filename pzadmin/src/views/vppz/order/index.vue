@@ -8,6 +8,11 @@
 
             </el-table-column>
             <el-table-column prop="demand" label="备注" />
+            <el-table-column prop="companion" label="就诊医生">
+                <template #default="scope">
+                    {{ scope.row.companion.name }}
+                </template>
+            </el-table-column>
             <el-table-column prop="client" label="陪护师">
                 <template #default="scope">
                     {{ scope.row.client.name }}
