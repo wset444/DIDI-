@@ -27,8 +27,8 @@
             <el-table-column prop="mobile" label="手机号" />
             <el-table-column prop="active" label="状态">
                 <template #default="scope">
-                    <el-tag :type="scope.row.active != 1 ? 'success' : 'danger'"> {{ scope.row.active != 1 ? '生效' :
-            '失效'
+                    <el-tag :type="scope.row.active != 1 ? 'danger' : 'success'"> {{ scope.row.active != 1 ? '失效' :
+            '生效'
                         }}</el-tag>
                 </template>
             </el-table-column>
@@ -84,8 +84,8 @@
 
                 <el-form-item label="是否生效" prop="active">
                     <el-radio-group v-model="permissions.active">
-                        <el-radio :value="nub.a" size="large">失效</el-radio>
-                        <el-radio :value="nub.b" size="large">生效</el-radio>
+                        <el-radio :value="nub.a" size="large">生效</el-radio>
+                        <el-radio :value="nub.b" size="large">失效</el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
@@ -197,7 +197,7 @@ const edites = () => {
         id: permissions.value.id,
         mobile: permissions.value.mobile,
         active: Number(permissions.value.active),
-        age: permissions.value.age,
+        age: Number(permissions.value.age),
         avatar: permissions.value.avatar,
         name: permissions.value.name,
         sex: permissions.value.sex,

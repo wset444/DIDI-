@@ -51,7 +51,6 @@ instance.interceptors.response.use(
     if (res.data.code === -2) {
       localStorage.removeItem("pz_token");
       localStorage.removeItem("pz_userInfo");
-      localStorage.removeItem("pz_v3pz");
       window.location.href = window.location.origin;
       ElMessage.error("用户信息已失效！");
     }
