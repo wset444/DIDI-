@@ -3,25 +3,30 @@
         <paneHead :title="route.meta.name" :description="route.meta.describe" />
         <div><el-button @click="add">创建</el-button></div>
         <el-table :data="tableData" stripe style="width: 100%">
-            <el-table-column prop="id" label="id" />
-            <el-table-column prop="avatar" label="头像" />
-            <el-table-column prop="name" label="昵称" />
-            <el-table-column prop="age" label="年龄">
+            <el-table-column prop="user_id" label="医院id" />
+            <el-table-column prop="hospital_name" label="医院名称">
 
             </el-table-column>
-            <el-table-column prop="mobile" label="手机号" />
-            <el-table-column prop="active" label="状态">
+            <el-table-column prop="demand" label="备注" />
+            <el-table-column prop="client" label="陪护师">
                 <template #default="scope">
-                    <el-tag :type="scope.row.active != 1 ? 'success' : 'danger'"> {{ scope.row.active != 1 ? '生效' : '失效'
-                        }}</el-tag>
+                    {{ scope.row.client.name }}
                 </template>
+
             </el-table-column>
-            <el-table-column prop="create_time" label="创建时间">
+            <el-table-column prop="receiveAddress" label="接送地址" />
+            <el-table-column prop="tel" label="服务名称">
+
+            </el-table-column>
+            <el-table-column prop="service_state" label="接单状态">
+
+            </el-table-column>
+            <el-table-column prop="order_start_time" label="创建时间">
                 <template #default="scope">
                     <div style="display: flex;align-items: center;">
                         <el-icon>
                             <Clock />
-                        </el-icon> {{ formatTimestamp(scope.row.create_time) }}
+                        </el-icon> {{ formatTimestamp(scope.row.order_start_time) }}
                     </div>
                 </template>
             </el-table-column>
