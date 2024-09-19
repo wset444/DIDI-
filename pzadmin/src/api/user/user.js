@@ -71,3 +71,10 @@ export const order = (params) => {
     params,
   });
 };
+export const updateOrder = (data) => {
+  return instance({
+    method: "post",
+    url: "/update/order",
+    data,
+  });
+};

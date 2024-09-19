@@ -1,43 +1,71 @@
 <template>
     <div>
         <paneHead :title="route.meta.name" :description="route.meta.describe" />
-        <div><el-button @click="add">创建</el-button></div>
+        <div class="form">
+            <el-input v-model="input" style="width: 240px" />
+            <el-button type="primary" style="margin:0 10px;" @click="search" placeholder="订单号">搜索</el-button>
+        </div>
         <el-table :data="tableData" stripe style="width: 100%">
-            <el-table-column prop="user_id" label="医院id" />
-            <el-table-column prop="hospital_name" label="医院名称">
+            <el-table-column prop="out_trade_no" label="订单号" />
+            <el-table-column prop="hospital_name" label="就诊医院">
 
             </el-table-column>
-            <el-table-column prop="demand" label="备注" />
-            <el-table-column prop="companion" label="就诊医生">
+            <el-table-column prop="service_name" label="陪诊服务" />
+            <el-table-column prop="companion" label="陪护师">
                 <template #default="scope">
-                    {{ scope.row.companion.name }}
+                    <div class="lay">
+                        <img :src="scope.row.companion.avatar" alt="" style="width: 50px; height: 50px;">
+                    </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="client" label="陪护师">
-                <template #default="scope">
-                    {{ scope.row.client.name }}
-                </template>
+            <el-table-column prop="client.mobile" label="陪护师手机号">
+
 
             </el-table-column>
-            <el-table-column prop="receiveAddress" label="接送地址" />
-            <el-table-column prop="tel" label="服务名称">
+            <el-table-column prop="price" label="总价" />
+            <el-table-column prop="paidPrice" label="已付">
 
+            </el-table-column>
+            <el-table-column prop="starttime" label="下单时间">
+
+            </el-table-column>
+            <el-table-column prop="order_start_time" label="订单状态">
+                <template #default="scope">
+
+                    <el-button type="primary" plain v-if="scope.row.trade_state === '待服务'">{{ scope.row.trade_state
+                        }}</el-button>
+                    <el-button type="info" plain v-if="scope.row.trade_state === '待支付'"> {{ scope.row.trade_state
+                        }}</el-button>
+                    <el-button type="danger" plain v-if="scope.row.trade_state === '已取消'"> {{ scope.row.trade_state
+                        }}</el-button>
+                    <el-button type="success" plain v-if="scope.row.trade_state === '已完成'"> {{ scope.row.trade_state
+                        }}</el-button>
+
+                </template>
             </el-table-column>
             <el-table-column prop="service_state" label="接单状态">
 
             </el-table-column>
-            <el-table-column prop="order_start_time" label="创建时间">
-                <template #default="scope">
-                    <div style="display: flex;align-items: center;">
-                        <el-icon>
-                            <Clock />
-                        </el-icon> {{ formatTimestamp(scope.row.order_start_time) }}
-                    </div>
-                </template>
+            <el-table-column prop="companion.mobile" label="联系人手机号">
+
             </el-table-column>
-            <el-table-column label="编辑">
+            <el-table-column prop="trade_state" label="操作">
                 <template #default="scope">
-                    <el-button @click="editsItem(scope.row)">编辑</el-button>
+
+                    <el-button type="primary" text v-if="scope.row.trade_state === '待服务'"
+                        @click="upData(scope.row.id)">{{
+            InfoMap[scope.row.trade_state]
+        }}</el-button>
+                    <el-button type='primary' text v-if="scope.row.trade_state === '待支付'"
+                        @click="upData(scope.row.out_trade_no)">
+                        {{
+            InfoMap[scope.row.trade_state]
+        }}</el-button>
+                    <el-button type="primary" text v-if="scope.row.trade_state === '已取消'" disabled> {{
+            InfoMap[scope.row.trade_state]
+        }}</el-button>
+
+
                 </template>
             </el-table-column>
         </el-table>
@@ -89,40 +117,60 @@
                 </el-form-item>
             </el-form>
             <template #footer>
-                <el-button type="primary" @click="edites()">确定</el-button>
+                <el-button type="primary" @click="edites()"> </el-button>
             </template>
         </el-dialog>
     </div>
 </template>
 
 <script setup>
-import { companion, addCompanions, UserInfo, order } from '../../../api/user/user'
-import { selectList } from '../../../api/user/menu'
+import { companion, addCompanions, order, updateOrder } from '../../../api/user/user'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Search } from '@element-plus/icons-vue'
 
+
+const upData = (id) => {
+    console.log(id);
+    updateOrder({
+        id
+    }).then(res => {
+        order(pagination.value).then((res) => {
+            tableData.value = res.data.data.list
+            pagination.value.total = res.data.data.total
+
+        })
+    })
+
+}
+
+const InfoMap = {
+    '待支付': '暂无服务',
+    '已取消': '暂无服务',
+    '已接单': '服务完成'
+}
+
+const input = ref('')
+const search = () => {
+    order({
+        pageNum: pagination.value.pageNum,
+        pageSize: pagination.value.pageSize,
+        out_trade_no: input.value
+    }).then(res => {
+        tableData.value = res.data.data.list
+        pagination.value.total = res.data.data.total
+    })
+}
 const nub = {
     a: 1,
     b: 2
 }
 
-
 const imageUrl = ref('')
 
-
-
-
 //创建陪护师傅
-const add = () => {
-    dialogTableVisible.value = true
-    // addCompanions(permissions.value)
-}
-
 const route = useRoute()
-
-
 //编辑
 const permissions = ref({
     id: "",
@@ -134,14 +182,6 @@ const permissions = ref({
     sex: ""
 })
 const dialogTableVisible = ref(false)
-const editsItem = (item) => {
-    dialogTableVisible.value = true
-    permissions.value = item
-    console.log(permissions.value);
-
-}
-
-
 //确定修改
 const edites = () => {
     addCompanions({
@@ -165,40 +205,16 @@ const edites = () => {
         }
     })
 }
-
 //分页
-
 const handleSizeChange = (val) => { console.log(val); }
 const handleCurrentChange = (val) => {
     pagination.value.pageNum = val
-    authAdmin(pagination.value).then((res) => {
+    order(pagination.value).then((res) => {
         tableData.value = res.data.data.list
         pagination.value.total = res.data.data.total
     })
-
 }
-
-//解析时间戳
-const formatTimestamp = (ts) => {
-    // 创建一个新的Date对象  
-    const date = new Date(ts);
-
-    // 格式化日期时间字符串  
-    // 注意：这里的格式化方式可以根据你的需求进行调整  
-    return date.toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false, // 使用24小时制  
-    });
-};
-
-
 const tableData = ref([])
-
 const pagination = ref({
     pageNum: 1,
     pageSize: 10,
@@ -215,7 +231,18 @@ onMounted(() => {
 
 })
 
-
-
-
 </script>
+<style>
+.lay {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form {
+    display: flex;
+    justify-content: end;
+    background: #fff;
+    padding: 10px;
+}
+</style>
